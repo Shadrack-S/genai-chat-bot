@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import connectDB from './config/dbConnection.js';
 import chatRouter from './routes/chatRoutes.js';
+import messageRouter from './routes/messageRoutes.js';
 
 
 
@@ -20,6 +21,7 @@ app.get("/",(req,res)=>{
 
 // Routes
 app.use('/api/chat',chatRouter)
+app.use('/api/message',messageRouter)
 
 app.listen(port, () => {
     console.log(`Server is running on PORT:${port}`);
