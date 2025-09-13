@@ -2,6 +2,8 @@ import'dotenv/config';
 import express from "express";
 import cors from "cors";
 import connectDB from './config/dbConnection.js';
+import chatRouter from './routes/chatRoutes.js';
+import messageRouter from './routes/messageRoutes.js';
 
 
 
@@ -12,10 +14,14 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// Health Check Route
 app.get("/",(req,res)=>{
     res.send("Server is Up!!!")
 })
+
+// Routes
+app.use('/api/chat',chatRouter)
+app.use('/api/message',messageRouter)
 
 app.listen(port, () => {
     console.log(`Server is running on PORT:${port}`);
