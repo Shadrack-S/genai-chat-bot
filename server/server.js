@@ -1,6 +1,7 @@
 import'dotenv/config';
 import express from "express";
 import cors from "cors";
+import morgan from 'morgan';
 import connectDB from './config/dbConnection.js';
 import chatRouter from './routes/chatRoutes.js';
 import messageRouter from './routes/messageRoutes.js';
@@ -12,6 +13,7 @@ const app = express();
 await connectDB()
 const port = process.env.PORT || 3000;
 app.use(cors());
+app.use(morgan('dev'));
 app.use(express.json());
 
 // Health Check Route
