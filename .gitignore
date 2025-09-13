@@ -3,3 +3,7 @@
 server/.env
 server/package-lock.json
 server/node_modules
+
+# Client
+client/.env
+client/package-lock.json
