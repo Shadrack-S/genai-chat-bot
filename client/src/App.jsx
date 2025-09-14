@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import SideBar from './components/SideBar.jsx'
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation } from "react-router";
 import ChatBox from './components/ChatBox.jsx';
 import Login from './pages/Login.jsx';
 import { assets } from './assets/assets.js';
+import './assets/prism.css'
+import Loading from './pages/Loading.jsx';
 
 const App = () => {
 
   const [isMenuOpen,setIsMenuOpen]= useState(false)
-
+  const{pathname} =useLocation()
+  if(pathname ==='/loading') return <Loading/>
   return (
    <>
    {!isMenuOpen && <img src ={assets.menu_icon} 
