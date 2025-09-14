@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Wancho&family=Outfit:wght@100..900&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+*{
+    font-family: "Noto Sans Wancho", sans-serif;
+}
+@theme{
+    --color-primary:#E6CCFFL
+}
+::-webkit-scrollbar{
+    display: none;
+}
