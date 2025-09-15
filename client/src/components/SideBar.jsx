@@ -4,9 +4,8 @@ import { assets } from '../assets/assets'
 import moment from 'moment'
 
 const SideBar = ({isMenuOpen ,setIsMenuOpen}) => {
-  const { chats, selectedChat,setSelectedChat, theme, setTheme, user,navigate } = useAppContext()
+  const { chats, selectedChat,setSelectedChat, theme, setTheme, user,navigate,createNewChat } = useAppContext()
   const [search, setSearch] = useState('')
-
   return (
     <div
       className={`flex flex-col h-screen min-w-72 p-5 dark:bg-gradient-to-b from-[#242124]/30 to-[#000000]/30 border-r border-[#80609F]/30 
@@ -20,7 +19,9 @@ const SideBar = ({isMenuOpen ,setIsMenuOpen}) => {
       />
 
       {/* New Chat Button */}
-      <button className='flex justify-center items-center w-full py-2 mt-10
+      <button
+      onClick={createNewChat}
+        className='flex justify-center items-center w-full py-2 mt-10
       text-white bg-gradient-to-r from-[#A456F7] to-[#3D81F6] text-sm rounded-md cursor-pointer'>
         <span
         className='mr-2 text-xl'
@@ -41,31 +42,41 @@ const SideBar = ({isMenuOpen ,setIsMenuOpen}) => {
       {chats && chats.length > 0 && <p className='mt-4 text-sm'>Recent Chats</p>}
       <div className='flex-1 overflow-y-scroll mt-3 text-sm space-y-3'>
         {
-            chats.filter((chat)=>chat.messages[0] ? chat.messages[0]?.content.
-            toLowerCase().includes(search.toLowerCase()):chat.name.toLowerCase().
-            includes(search.toLowerCase())).map((chat)=>(
-                <div onClick={()=>{
-                    navigate('/');
-                    setSelectedChat(chat);
-                    setIsMenuOpen(false)
-                    }}
-                key={chat._id} className='p-2 px-4 dark:bg-[#57317C]/10
-                border border-gray-300 dark:border-[#80609F]/15 rounded-md cursor-pointer
-                flex justify-between group'>
-                    <div>
-                        <p className='truncate w-full'>
-                            {chat.messages.length > 0 ? chat.messages[0].content.slice(0,32) : chat.name}
-                        </p>
-                        <p  className='text-xs text-gray-500 dark:text-[#B1A6C0]'>
-                            {moment(chat.updatedAt).fromNow()}
-                        </p>
-                    </div>
-                    <img src={assets.bin_icon}
-                    className='hidden group-hover:block w-4 cursor-pointer not-dark:invert'
-                     alt="delete"></img>
-
-                </div>
-            ))
+          chats.filter((chat) => {
+            // Check if chat.message is an array with at least one element and part[0] exists
+            if (Array.isArray(chat.message) && chat.message.length > 0 && chat.message[0]?.part && Array.isArray(chat.message[0].part) && chat.message[0].part.length > 0 && chat.message[0].part[0]?.text) {
+              return chat.message[0].part[0].text.toLowerCase().includes(search.toLowerCase());
+            } else if (chat.name) {
+              return chat.name.toLowerCase().includes(search.toLowerCase());
+            }
+            return false;
+          }).map((chat) => (
+            <div
+              onClick={() => {
+                navigate('/');
+                setSelectedChat(chat);
+                setIsMenuOpen(false);
+              }}
+              key={chat._id}
+              className='p-2 px-4 dark:bg-[#57317C]/10 border border-gray-300 dark:border-[#80609F]/15 rounded-md cursor-pointer flex justify-between group'
+            >
+              <div>
+                <p className='truncate w-full'>
+                  {Array.isArray(chat.message) && chat.message.length > 0 && chat.message[0]?.part && Array.isArray(chat.message[0].part) && chat.message[0].part.length > 0 && chat.message[0].part[0]?.text
+                    ? chat.message[0].part[0].text.slice(0, 32)
+                    : chat.name}
+                </p>
+                <p className='text-xs text-gray-500 dark:text-[#B1A6C0]'>
+                  {moment(chat.updatedAt).fromNow()}
+                </p>
+              </div>
+              <img
+                src={assets.bin_icon}
+                className='hidden group-hover:block w-4 cursor-pointer not-dark:invert'
+                alt="delete"
+              />
+            </div>
+          ))
         }
       </div>
 

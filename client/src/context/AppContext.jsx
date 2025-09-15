@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { dummyChats, dummyUserData } from "../assets/assets";
+import {  dummyUserData } from "../assets/assets";
 import axios from "axios"
+import toast from "react-hot-toast";
 
 
 // AxiosConfig
@@ -22,41 +23,79 @@ export const AppContextProvider = ({ children }) => {
         setUser(dummyUserData)
     }
 
-    const createNewChat =async ()=>{
-        try{
+    const createNewChat = async () => {
 
-            if(!user) return toast("Login to create new chat")
+        try {
+            if (!user) return toast("Login to create a new chat")
             navigate('/')
-            await axios.get('/api/chat/create')
-        }catch(error){
-
+            await axios.post(
+                '/api/chat/create',
+                {   
+                    userName: dummyUserData.name
+                },
+                {   
+                    headers: {
+                        Authorization: "token"
+                    }
+                }
+            );
+            fetchUsersChats()
+        } catch (error) {
+            toast.error(error.message)
         }
+
     }
 
-    const fetchUsersChats = async ( )=>{
-        setChats(dummyChats)
-        setSelectedChat(dummyChats[0])
+    const fetchUsersChats = async () => {
+        try {
+            const { data } = await axios.get('/api/chat/get', {
+                headers: {
+                    Authorization: "token"
+                },
+                params: {
+                    userName: dummyUserData.name
+                }
+            })
+            if (data.success) {
+                setChats(data.chats)
+                // no chat
+                if (data.chats.length === 0) {
+                    await createNewChat()
+                    return fetchUsersChats
+                }else{
+                    setSelectedChat(data.chats[0])
+                }
+            }else{
+                toast.error(data.message
+
+                )
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+        // setChats(dummyChats)
+        // setSelectedChat(dummyChats[0])
     }
 
     // To set theme in local storage
-    useEffect(()=>{
-        if(theme === 'dark'){
+    useEffect(() => {
+        if (theme === 'dark') {
             document.documentElement.classList.add('dark');
-        }else{
+        } else {
             document.documentElement.classList.remove('dark');
         }
 
-    },[theme])
+    }, [theme])
 
     // For loading chat when user is logged in
-    useEffect(()=>{
-        if(user){
+    useEffect(() => {
+        if (user) {
             fetchUsersChats()
-        }else{
+        } else {
             setChats([])
             setSelectedChat(null)
         }
-    },[user])
+    }, [user])
 
     // To check if user is logged in or not
     useEffect(() => {
@@ -72,7 +111,10 @@ export const AppContextProvider = ({ children }) => {
         setSelectedChat,
         theme,
         setTheme,
-        fetchUser
+        fetchUser,
+        createNewChat,
+        axios
+
     }
     return (
         <AppContext.Provider value={value}>
