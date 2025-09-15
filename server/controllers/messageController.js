@@ -2,6 +2,7 @@ import { text } from "express";
 import gemiAI from "../config/geminiAI.js";
 import ChatModel from "../models/chatModel.js";
 
+
 export const textMessageController = async (req, res) => {
   try {
     const { chatId, prompt } = req.body;
@@ -17,6 +18,7 @@ export const textMessageController = async (req, res) => {
     if (!chat) {
       return res.json({ success: false, message: "Chat not found" });
     }
+    chat.name = prompt
     chat.message.push({
       role: "user",
       parts: [{ text: prompt }],

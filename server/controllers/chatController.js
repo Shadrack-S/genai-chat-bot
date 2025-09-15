@@ -4,7 +4,6 @@ import ChatModel from "../models/chatModel.js";
 
 export const createChat = async (req, res) => {
   try {
-    console.log(req.body);
     const chatData = {
       message: [],
       name: "New Chat",
