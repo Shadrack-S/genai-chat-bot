@@ -8,8 +8,7 @@ const SideBar = ({isMenuOpen ,setIsMenuOpen}) => {
   const [search, setSearch] = useState('')
   return (
     <div
-      className={`flex flex-col h-screen min-w-72 p-5 dark:bg-gradient-to-b from-[#242124]/30 to-[#000000]/30 border-r border-[#80609F]/30 
-      backdrop-blur-3xl transition-all duration-500 max-md:absolute max-md:z-10 ${!isMenuOpen && 'max-md:-translate-x-full'}`}
+      className={`relative flex flex-col h-screen w-72 p-5 dark:bg-gradient-to-b from-[#242124]/30 to-[#000000]/30 border-r border-[#80609F]/30 backdrop-blur-3xl transition-all duration-500 max-md:absolute max-md:z-10 max-md:w-72 ${!isMenuOpen ? 'max-md:-translate-x-full' : ''}`}
     >
       {/* Logo */}
       <img
