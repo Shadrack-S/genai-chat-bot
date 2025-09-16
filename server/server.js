@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import connectDB from './config/dbConnection.js';
 import chatRouter from './routes/chatRoutes.js';
 import messageRouter from './routes/messageRoutes.js';
+import userRouter from './routes/userRoutes.js';
 
 
 
@@ -24,6 +25,7 @@ app.get("/",(req,res)=>{
 // Routes
 app.use('/api/chat',chatRouter)
 app.use('/api/message',messageRouter)
+app.use('/api/user',userRouter)
 
 app.listen(port, () => {
     console.log(`Server is running on PORT:${port}`);

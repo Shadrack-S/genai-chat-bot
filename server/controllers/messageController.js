@@ -1,4 +1,3 @@
-import { text } from "express";
 import gemiAI from "../config/geminiAI.js";
 import ChatModel from "../models/chatModel.js";
 
