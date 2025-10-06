@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { generateOtp } from "../utils/otpGenerate.js";
 import { sendEmail } from "../utils/mailer.js";
 import moment from "moment";
-import { response } from "express";
+import { generateToken } from "../utils/token.js";
 
 const secretKey = process.env.JWT_SECRET_KEY;
 
@@ -152,7 +152,9 @@ export const userSignup = async(req, res)=>{
     { new: true }
     );
 
-    res.json({success:true , message:"Signup success!",data:response})
+    const token = await generateToken(response )
+
+    res.json({success:true , message:"Signup success!",data:token})
 
 }
 

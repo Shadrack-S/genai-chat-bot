@@ -15,7 +15,8 @@ const userSchema = new Schema(
       },
       { _id: false }
     ],
-    isFirstTimeLogin: { type: Boolean, default: true }
+    isFirstTimeLogin: { type: Boolean, default: true },
+    is2FAEnabled: { type: Boolean, default: false },
   },
   {
     timestamps: true
